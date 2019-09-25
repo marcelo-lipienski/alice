@@ -1,0 +1,22 @@
+{
+  "name": "alice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcelo-lipienski/alice.git"
+  },
+  "author": "Marcelo Lipienski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marcelo-lipienski/alice/issues"
+  },
+  "homepage": "https://github.com/marcelo-lipienski/alice#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
