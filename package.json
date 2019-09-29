@@ -19,11 +19,13 @@
   },
   "homepage": "https://github.com/marcelo-lipienski/alice#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.7.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.2",
-    "@babel/preset-env": "^7.6.2"
+    "@babel/preset-env": "^7.6.2",
+    "@babel/preset-react": "^7.0.0"
   }
 }
