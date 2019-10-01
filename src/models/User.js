@@ -5,7 +5,8 @@ import Error from '../helpers/Error.js'
 const userSchema = new Schema({
   _id: Schema.Types.ObjectId,
   email: String,
-  password: String
+  password: String,
+  jwt: String
 })
 
 userSchema.pre('save', async function(next) {
