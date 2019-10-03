@@ -1,45 +1,52 @@
 import express from 'express'
 import passport from 'passport'
-import UserService from '../services/User.js'
+import User from '../models/User'
+import ServiceProvider from '../services/ServiceProvider'
+import UserService from '../services/User'
 
 const router = express.Router()
 
+let Provider = new ServiceProvider(User)
+
 router.get('/', passport.authenticate('jwt', { session: false }),
   async function (req, res) {
-    const users = await UserService.all()
-    res.json(users)
+    const response = await Provider.all('-password -jwt')
+    res.status(response.status).json(response)
   }
 )
 
 router.get('/:id', passport.authenticate('jwt', { session: false }),
   async function (req, res) {
-    const { id } = req.params
-    const user = await UserService.get(id)
-    res.json(user)
+    const id = req.params.id
+    const response = await Provider.get(id, '-password -jwt')
+    res.status(response.status).json(response)
   }
 )
 
 router.post('/', passport.authenticate('jwt', { session: false }),
   async function (req, res) {
     const { email, password }  = req.body
-    const user = await UserService.create({ email, password })
-    res.json(user)
+    const response = await Provider.create({ email, password }, 'email')
+    res.status(response.status).json(response)
   }
 )
 
 router.put('/:id', passport.authenticate('jwt', { session: false }),
   async function (req, res) {
-    const { id } = req.params
-    const { password } = req.body
+    const id = req.params.id
+    const params = {
+      password: req.body.password
+    }
 
-    const user = await UserService.update({ id, password })
+    const response = await Provider.update(id, params)
+    res.status(response.status).json(response)
   }
 )
 
 router.delete('/:id', passport.authenticate('jwt', { session: false }),
   async function (req, res) {
-    const { id } = req.params
-    const response = await UserService.delete(id)
+    const id = req.params.id
+    const response = await Provider.delete(id)
     res.status(response.status).json(response)
   }
 )
