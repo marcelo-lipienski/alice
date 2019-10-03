@@ -8,6 +8,9 @@ const router = express.Router()
 
 let Provider = new ServiceProvider(User)
 
+/**
+ * GET /users
+ */
 router.get('/', passport.authenticate('jwt', { session: false }),
   async function (req, res) {
     const response = await Provider.all('-password -jwt')
@@ -15,6 +18,10 @@ router.get('/', passport.authenticate('jwt', { session: false }),
   }
 )
 
+/**
+ * GET /users/:id
+ * @param {string} id A valid mongoose ObjectId
+ */
 router.get('/:id', passport.authenticate('jwt', { session: false }),
   async function (req, res) {
     const id = req.params.id
@@ -23,6 +30,11 @@ router.get('/:id', passport.authenticate('jwt', { session: false }),
   }
 )
 
+/**
+ * POST /users/
+ * @param {string} email User's email
+ * @param {string} password User's password
+ */
 router.post('/', passport.authenticate('jwt', { session: false }),
   async function (req, res) {
     const { email, password }  = req.body
@@ -31,6 +43,11 @@ router.post('/', passport.authenticate('jwt', { session: false }),
   }
 )
 
+/**
+ * PUT /users/:id
+ * @param {string} id A valid mongoose ObjectId
+ * @param {string} password New password
+ */
 router.put('/:id', passport.authenticate('jwt', { session: false }),
   async function (req, res) {
     const id = req.params.id
@@ -43,6 +60,10 @@ router.put('/:id', passport.authenticate('jwt', { session: false }),
   }
 )
 
+/**
+ * DELETE /users/:id
+ * @param {string} id A valid mongoose ObjectId
+ */
 router.delete('/:id', passport.authenticate('jwt', { session: false }),
   async function (req, res) {
     const id = req.params.id
@@ -51,6 +72,11 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }),
   }
 )
 
+/**
+ * POST /users/auth
+ * @param {string} email User's email
+ * @param {string} password User's password
+ */
 router.post('/auth', async function (req, res) {
   const { email, password }  = req.body
   const response = await UserService.authenticate(email, password)
