@@ -3,9 +3,9 @@ import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import passport from 'passport'
 import { Strategy, ExtractJwt } from 'passport-jwt'
+import UserModel from './models/User'
 import Property from './controllers/Property'
 import User from './controllers/User'
-import UserService from './services/User'
 
 mongoose.connect('mongodb://localhost/alice', {
   useNewUrlParser: true,
@@ -19,7 +19,7 @@ passport.use(new Strategy({
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: 'secret'
 }, async function (jwt_payload, done) {
-  const user = await UserService.get(jwt_payload.sub)
+  const user = await UserModel.findById(jwt_payload._id)
   return done(null, user)
 }))
 
