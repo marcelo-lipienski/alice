@@ -39,26 +39,34 @@ export default class ServiceProvider {
 
   // Creates a user
   // Expects an object matching the User mongoose model
-  async create(params, uniqueField = false) {
+  async create(values, fields, uniqueField = false) {
+    let object = { }
+
+    fields.forEach((field, index) => {
+      if (values[field]) {
+        object[field] = values[field]
+      }
+    })
+
     try {
       if (uniqueField) {
-        const res = await this.entity.findOne({ [uniqueField]: params[uniqueField] })
+        const res = await this.entity.findOne({ [uniqueField]: object[uniqueField] })
         if (res) {
           return ResponseBuilder.error(400, res)
         }
       }
 
-      params._id = mongoose.Types.ObjectId()
+      object._id = mongoose.Types.ObjectId()
 
-      const newDocument = await new this.entity(params).save()
+      const newDocument = await new this.entity(object).save()
 
       return ResponseBuilder.success(200, newDocument)
     } catch (err) {
-      return new Error(err)
+      return ResponseBuilder.error(400, err)
     }
   }
 
-  async update(id, params) {
+  async update(id, values, fields) {
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return ResponseBuilder.error(400, {
         name: 'Invalid object',
@@ -66,8 +74,16 @@ export default class ServiceProvider {
       })
     }
 
+    let object = { }
+
+    fields.forEach((field, index) => {
+      if (values[field]) {
+        object[field] = values[field]
+      }
+    })
+
     try {
-      const status = await this.entity.findByIdAndUpdate(id, params, { new: true })
+      const status = await this.entity.findByIdAndUpdate(id, object, { new: true })
 
       if (status instanceof Object) {
         return ResponseBuilder.success(200, status)

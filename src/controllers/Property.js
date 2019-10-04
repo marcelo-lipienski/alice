@@ -35,8 +35,14 @@ router.get('/:id', passport.authenticate('jwt', { session: false }),
  */
 router.post('/', passport.authenticate('jwt', { session: false }),
   async function (req, res) {
-    const { ref, price }  = req.body
-    const response = await Provider.create({ ref, price }, 'ref')
+    const fields = [
+      'owner', 'ref', 'about', 'description', 'bedrooms', 'bathrooms',
+      'land_area', 'constructed_area', 'selling', 'sell_price', 'rent'
+    ]
+
+    const uniqueField = 'ref'
+
+    const response = await Provider.create(req.body, fields, uniqueField)
     res.status(response.status).json(response)
   }
 )
@@ -50,12 +56,13 @@ router.post('/', passport.authenticate('jwt', { session: false }),
 router.put('/:id', passport.authenticate('jwt', { session: false }),
   async function (req, res) {
     const id = req.params.id
-    const params = {
-      price: req.body.price,
-      area: req.body.area
-    }
+    const fields = [
+      'owner', 'ref', 'about', 'description', 'bedrooms', 'bathrooms',
+      'land_area', 'constructed_area', 'selling', 'sell_price', 'rent'
+    ]
 
-    const response = await Provider.update(id, params)
+
+    const response = await Provider.update(id, req.body, fields)
     res.status(response.status).json(response)
   }
 )
